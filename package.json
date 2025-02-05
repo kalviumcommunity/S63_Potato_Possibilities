@@ -1,17 +1,17 @@
 {
+  "dependencies": {
+    "express": "^4.21.2"
+  },
   "name": "s63_potato_possibilities",
   "version": "1.0.0",
   "description": "Potato Possibilities",
-  "main": "index.js",
+  "main": "server.js",
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
-  "author": "parv",
-  "license": "ISC",
-  "dependencies": {
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "mongoose": "^8.9.5",
-    "nodemon": "^3.1.9"
-  }
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }
