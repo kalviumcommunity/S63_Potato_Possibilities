@@ -1,11 +1,18 @@
-const express = require('express');
+require("dotenv").config();
+const express = require("express");
+const cors = require("cors");
+const connectDB = require("./connectDB"); // Import connectDB
+
 const app = express();
-const port = 3000;
+app.use(express.json());
+app.use(cors());
 
-app.get('/ping', (req, res) => {
-    res.send('pong');
+// Connect to MongoDB Atlas
+connectDB();
+
+app.get("/", (req, res) => {
+  res.send("Potato Possibilities API is now running!");
 });
 
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log("🚀 Server running on port ${PORT}"));
