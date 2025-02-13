@@ -11,8 +11,8 @@ app.use(cors());
 connectDB();
 
 app.get("/", (req, res) => {
-  res.send("Potato Possibilities API is now running!");
+  res.send("🥔 Potato Possibilities API is now running!");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log("🚀 Server running on port ${PORT}"));
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
