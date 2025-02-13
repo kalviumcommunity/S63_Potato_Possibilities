@@ -1,35 +1,51 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from 'react';
+import './App.css';
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
+    <div className="landing-page">
+      {/* Hero Section */}
+      <header className="hero-section">
+        <h1>Potato Possibilities</h1>
+        <p>Unleash your creativity with the most versatile vegetable!</p>
+        <button className="cta-button" onClick={() => alert("Let's get cooking!")}>
+          Explore Dishes
         </button>
+      </header>
+
+      {/* About Section */}
+      <section className="about-section">
+        <h2>What is Potato Possibilities?</h2>
         <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
+          Potato Possibilities is a fun and interactive platform where you can share, discover, and vote on the most creative potato-based dishes. Whether it's a quirky recipe or a classic with a twist, this is the place to celebrate the humble potato in all its glory!
         </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+      </section>
+
+      {/* Features Section */}
+      <section className="features-section">
+        <h2>Key Features</h2>
+        <div className="features-grid">
+          <div className="feature-card">
+            <h3>Submit Dishes</h3>
+            <p>Share your unique potato creations with the world.</p>
+          </div>
+          <div className="feature-card">
+            <h3>Browse & Vote</h3>
+            <p>Discover and upvote your favorite potato dishes.</p>
+          </div>
+          <div className="feature-card">
+            <h3>Interactive Dashboard</h3>
+            <p>See the most popular dishes in real-time.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="footer">
+        <p>© 2023 Potato Possibilities. All rights reserved.</p>
+      </footer>
+    </div>
+  );
 }
 
-export default App
+export default App;
