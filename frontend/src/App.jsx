@@ -1,5 +1,13 @@
-import React from 'react';
-import './App.css';
+import React from "react";
+import PotatoDishCard from "./components/PotatoDishCard";
+import "./App.css";
+
+const dummyDish = {
+  name: "Cheesy Garlic Mashed Potatoes",
+  description: "Creamy mashed potatoes with melted cheese and garlic butter.",
+  image: "https://homecookedharvest.com/wp-content/uploads/2021/10/Cheese-Garlic-Mashed-Potatoes-MAIN-360x361.jpg",
+  creator: "Chef Angel Potato",
+};
 
 function App() {
   return (
@@ -8,9 +16,7 @@ function App() {
       <header className="hero-section">
         <h1>Potato Possibilities</h1>
         <p>Unleash your creativity with the most versatile vegetable!</p>
-        <button className="cta-button" onClick={() => alert("Let's get cooking!")}>
-          Explore Dishes
-        </button>
+        <button className="cta-button" onClick={() => alert("Let's get cooking!")}>Explore Dishes</button>
       </header>
 
       {/* About Section */}
@@ -38,6 +44,12 @@ function App() {
             <p>See the most popular dishes in real-time.</p>
           </div>
         </div>
+      </section>
+
+      {/* Featured Dishes Section */}
+      <section className="featured-dishes">
+        <h2>Featured Potato Dish</h2>
+        <PotatoDishCard {...dummyDish} />
       </section>
 
       {/* Footer */}
