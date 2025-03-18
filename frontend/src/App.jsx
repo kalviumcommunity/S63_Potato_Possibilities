@@ -14,7 +14,7 @@ function App() {
   // Fetch dishes from the backend
   useEffect(() => {
     axios
-      .get("http://localhost:3000/api/dishes")
+      .get("http://localhost:5000/api/dishes")
       .then((response) => {
         setDishes(response.data);
         setLoading(false); // Stop loading when data is fetched
@@ -100,15 +100,15 @@ function App() {
           <EntitiesList />
         </section>
 
-        {/* Footer */}
-        <footer className="footer">
-          <p>© 2023 Potato Possibilities. All rights reserved.</p>
-        </footer>
-
         {/* Routes for UpdateEntity */}
         <Routes>
           <Route path="/update/:id" element={<UpdateEntity />} />
         </Routes>
+
+        {/* Footer */}
+        <footer className="footer">
+          <p>© 2023 Potato Possibilities. All rights reserved.</p>
+        </footer>
       </div>
     </Router>
   );
