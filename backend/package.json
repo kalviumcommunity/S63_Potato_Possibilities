@@ -1,6 +1,10 @@
 {
   "dependencies": {
-    "express": "^4.21.2"
+    "axios": "^1.8.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.12.1"
   },
   "name": "s63_potato_possibilities",
   "version": "1.0.0",

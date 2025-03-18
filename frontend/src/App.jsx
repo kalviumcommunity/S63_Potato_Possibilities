@@ -1,29 +1,50 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import PotatoDishCard from "./components/PotatoDishCard";
 import "./App.css";
 
-const dummyDish = {
-  name: "Cheesy Garlic Mashed Potatoes",
-  description: "Creamy mashed potatoes with melted cheese and garlic butter.",
-  image: "https://homecookedharvest.com/wp-content/uploads/2021/10/Cheese-Garlic-Mashed-Potatoes-MAIN-360x361.jpg",
-  creator: "Chef Angel Potato",
-};
-
 function App() {
+  const [dishes, setDishes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
+
+  // Fetch dishes from the backend
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/api/dishes")
+      .then((response) => {
+        setDishes(response.data);
+        setLoading(false); // Stop loading when data is fetched
+      })
+      .catch((error) => {
+        setError("Error fetching dishes. Please try again later.");
+        console.error("Error fetching dishes:", error);
+        setLoading(false); // Stop loading on error as well
+      });
+  }, []);
+
   return (
     <div className="landing-page">
       {/* Hero Section */}
       <header className="hero-section">
         <h1>Potato Possibilities</h1>
         <p>Unleash your creativity with the most versatile vegetable!</p>
-        <button className="cta-button" onClick={() => alert("Let's get cooking!")}>Explore Dishes</button>
+        <button
+          className="cta-button"
+          onClick={() => alert("Let's get cooking!")}
+        >
+          Explore Dishes
+        </button>
       </header>
 
       {/* About Section */}
       <section className="about-section">
         <h2>What is Potato Possibilities?</h2>
         <p>
-          Potato Possibilities is a fun and interactive platform where you can share, discover, and vote on the most creative potato-based dishes. Whether it's a quirky recipe or a classic with a twist, this is the place to celebrate the humble potato in all its glory!
+          Potato Possibilities is a fun and interactive platform where you can
+          share, discover, and vote on the most creative potato-based dishes.
+          Whether it's a quirky recipe or a classic with a twist, this is the
+          place to celebrate the humble potato in all its glory!
         </p>
       </section>
 
@@ -48,8 +69,26 @@ function App() {
 
       {/* Featured Dishes Section */}
       <section className="featured-dishes">
-        <h2>Featured Potato Dish</h2>
-        <PotatoDishCard {...dummyDish} />
+        <h2>Featured Potato Dishes</h2>
+        {loading ? (
+          <p>Loading dishes... 🍟</p>
+        ) : error ? (
+          <p className="error-message">{error}</p>
+        ) : dishes.length > 0 ? (
+          <div className="dishes-grid">
+            {dishes.map((dish) => (
+              <PotatoDishCard
+                key={dish._id}
+                name={dish.name}
+                description={dish.description}
+                image={dish.image}
+                creator={dish.creator}
+              />
+            ))}
+          </div>
+        ) : (
+          <p>No dishes found. Be the first to share a new creation! 🥔</p>
+        )}
       </section>
 
       {/* Footer */}
