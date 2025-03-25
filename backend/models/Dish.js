@@ -1,13 +1,53 @@
-const mongoose = require("mongoose");
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../connectDB');
+const User = require('./User');
 
-const dishSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  description: { type: String, required: true },
-  image: { type: String, required: true },
-  creator: { type: String, required: true },
-  created_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Reference to User
+const Dish = sequelize.define('Dish', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  name: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  description: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  image: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  creator: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  // Foreign key to User model
+  created_by: {
+    type: DataTypes.INTEGER,
+    allowNull: true,
+    references: {
+      model: User,
+      key: 'id'
+    }
+  },
+  createdAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  },
+  updatedAt: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW
+  }
+}, {
+  tableName: 'dishes',
+  timestamps: true
 });
 
-const Dish = mongoose.model("Dish", dishSchema);
-module.exports = Dish;
+// Define the association
+Dish.belongsTo(User, { foreignKey: 'created_by', as: 'user' });
+User.hasMany(Dish, { foreignKey: 'created_by', as: 'dishes' });
 
+module.exports = Dish;

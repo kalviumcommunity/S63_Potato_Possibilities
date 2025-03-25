@@ -46,7 +46,7 @@ const EntitiesList = () => {
         if (window.confirm("Are you sure you want to delete this dish?")) {
             axios.delete(`http://localhost:5000/api/dishes/${id}`)
                 .then(() => {
-                    setEntities(entities.filter(entity => entity._id !== id));
+                    setEntities(entities.filter(entity => entity.id !== id));
                 })
                 .catch(err => {
                     console.error("Error deleting entity:", err);
@@ -93,7 +93,7 @@ const EntitiesList = () => {
                 >
                     <option value="">All Users</option>
                     {users.map((user) => (
-                        <option key={user._id} value={user._id}>
+                        <option key={user.id} value={user.id}>
                             {user.name}
                         </option>
                     ))}
@@ -105,22 +105,25 @@ const EntitiesList = () => {
             ) : (
                 <div className="entities-list">
                     {entities.map((entity) => (
-                        <div key={entity._id} className="entity-item">
+                        <div key={entity.id} className="entity-item">
                             <div className="entity-info">
                                 <h3>{entity.name}</h3>
                                 <p>{entity.description.substring(0, 100)}...</p>
                                 <p className="creator">By: {entity.creator}</p>
+                                {entity.user && (
+                                    <p className="created-by">Created by: {entity.user.name}</p>
+                                )}
                             </div>
                             <div className="entity-actions">
                                 <button 
                                     className="update-button"
-                                    onClick={() => handleUpdate(entity._id)}
+                                    onClick={() => handleUpdate(entity.id)}
                                 >
                                     Update
                                 </button>
                                 <button 
                                     className="delete-button"
-                                    onClick={() => handleDelete(entity._id)}
+                                    onClick={() => handleDelete(entity.id)}
                                 >
                                     Delete
                                 </button>

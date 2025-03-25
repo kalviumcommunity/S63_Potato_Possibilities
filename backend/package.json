@@ -5,7 +5,10 @@
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "joi": "^17.13.3",
-    "mongoose": "^8.12.1"
+    "mongoose": "^8.12.1",
+    "mysql2": "^3.14.0",
+    "sequelize": "^6.37.6",
+    "sqlite3": "^5.1.7"
   },
   "name": "s63_potato_possibilities",
   "version": "1.0.0",
