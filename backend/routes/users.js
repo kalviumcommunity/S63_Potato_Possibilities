@@ -3,6 +3,41 @@ const router = express.Router();
 const User = require('../models/User');
 const Dish = require('../models/Dish');
 
+// Login endpoint
+router.post('/login', async (req, res) => {
+  const { username } = req.body;
+
+  if (!username) {
+    return res.status(400).json({ message: 'Username is required' });
+  }
+
+  try {
+    // Check if user exists
+    const user = await User.findOne({ where: { username } });
+    
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Set username in cookie
+    res.cookie('username', username, {
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
+
+    res.json({ message: 'Login successful', user });
+  } catch (error) {
+    res.status(500).json({ message: 'Error during login: ' + error.message });
+  }
+});
+
+// Logout endpoint
+router.post('/logout', (req, res) => {
+  // Clear the username cookie
+  res.clearCookie('username');
+  res.json({ message: 'Logout successful' });
+});
+
 // GET all users
 router.get('/', async (req, res) => {
   try {
