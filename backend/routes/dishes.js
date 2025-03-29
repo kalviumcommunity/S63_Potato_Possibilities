@@ -3,6 +3,7 @@ const router = express.Router();
 const Dish = require("../models/Dish");
 const User = require("../models/User");
 const Joi = require("joi");
+const { authenticateJWT } = require("../middleware/auth");
 
 // Validation schema
 const dishSchema = Joi.object({
@@ -57,8 +58,8 @@ router.get("/by-user", async (req, res) => {
   }
 });
 
-// POST a new dish
-router.post("/create", async (req, res) => {
+// POST a new dish - Protected route
+router.post("/create", authenticateJWT, async (req, res) => {
   console.log("Received data:", req.body); // Log the incoming request body
 
   // Validate request body using Joi
@@ -67,18 +68,18 @@ router.post("/create", async (req, res) => {
     return res.status(400).json({ message: "Validation error: " + error.details[0].message });
   }
 
-  const { name, description, image, creator, created_by } = req.body;
+  // Get data from request body, but override created_by with authenticated user's ID
+  const { name, description, image, creator } = req.body;
+  const created_by = req.user.id; // Use the authenticated user's ID
 
   try {
-    // If created_by is provided, verify that the user exists
-    if (created_by) {
-      const user = await User.findByPk(created_by);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-    }
-
-    const newDish = await Dish.create({ name, description, image, creator, created_by });
+    const newDish = await Dish.create({ 
+      name, 
+      description, 
+      image, 
+      creator, 
+      created_by 
+    });
     
     // Fetch the dish with its associated user
     const savedDish = await Dish.findByPk(newDish.id, {
@@ -91,33 +92,37 @@ router.post("/create", async (req, res) => {
   }
 });
 
-// PUT (update) a dish
-router.put("/:id", async (req, res) => {
+// PUT (update) a dish - Protected route
+router.put("/:id", authenticateJWT, async (req, res) => {
   // Validate request body using Joi
   const { error } = dishSchema.validate(req.body);
   if (error) {
     return res.status(400).json({ message: "Validation error: " + error.details[0].message });
   }
 
-  const { name, description, image, creator, created_by } = req.body;
+  const { name, description, image, creator } = req.body;
 
   try {
-    // If created_by is provided, verify that the user exists
-    if (created_by) {
-      const user = await User.findByPk(created_by);
-      if (!user) {
-        return res.status(404).json({ message: "User not found" });
-      }
-    }
-
     const dish = await Dish.findByPk(req.params.id);
     
     if (!dish) {
       return res.status(404).json({ message: "Dish not found" });
     }
 
-    // Update the dish
-    await dish.update({ name, description, image, creator, created_by });
+    // Check if the authenticated user is the owner of the dish
+    if (dish.created_by !== req.user.id) {
+      return res.status(403).json({ message: "You can only update your own dishes" });
+    }
+
+    // Update the dish, but don't change the created_by field
+    await dish.update({ 
+      name, 
+      description, 
+      image, 
+      creator,
+      // Keep the original created_by value
+      created_by: dish.created_by
+    });
     
     // Fetch the updated dish with its associated user
     const updatedDish = await Dish.findByPk(req.params.id, {
@@ -130,13 +135,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// DELETE a dish
-router.delete("/:id", async (req, res) => {
+// DELETE a dish - Protected route
+router.delete("/:id", authenticateJWT, async (req, res) => {
   try {
     const dish = await Dish.findByPk(req.params.id);
 
     if (!dish) {
       return res.status(404).json({ message: "Dish not found" });
+    }
+
+    // Check if the authenticated user is the owner of the dish
+    if (dish.created_by !== req.user.id) {
+      return res.status(403).json({ message: "You can only delete your own dishes" });
     }
 
     await dish.destroy();
